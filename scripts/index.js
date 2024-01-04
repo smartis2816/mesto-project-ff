@@ -1,4 +1,6 @@
 // @todo: Темплейт карточки
+console.log('test');
+
 
 // @todo: DOM узлы
 
