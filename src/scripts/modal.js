@@ -22,4 +22,4 @@ const closeModalEscape = function(evt) {
     }
 }
 
-export { openModal, closeModal, closeModalOverlay, closeModalEscape}
+export { openModal, closeModal, closeModalOverlay}

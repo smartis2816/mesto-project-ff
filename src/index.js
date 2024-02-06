@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './scripts/card.js';
-import { openModal, closeModal, closeModalOverlay, closeModalEscape } from './scripts/modal.js';
+import { openModal, closeModal, closeModalOverlay } from './scripts/modal.js';
 
 const placesList = document.querySelector('.places__list');
 const allPopups = document.querySelectorAll('.popup');
@@ -12,10 +12,6 @@ const profileEditPopup = document.querySelector('.popup_type_edit');
 const profileForm = document.forms["edit-profile"];
 const profileNameInput = profileForm.elements.name;
 const profileJobInput = profileForm.elements.description;
-const profileTitle = document.querySelector('.profile__title').textContent;
-const profileDescription = document.querySelector('.profile__description').textContent;
-profileNameInput.value = profileTitle;
-profileJobInput.value = profileDescription;
 
 // Переменные для окна добавления карточки
 const newPlaceButton = document.querySelector('.profile__add-button');
@@ -30,10 +26,10 @@ const imagePopupContainer = document.querySelector('.popup_type_image');
 const imagePopupCaption = document.querySelector('.popup__caption');
 
 // Функция для открытия попапа изображения
-const openImagePopup = function (evt) {
-    imagePopupImage.src = evt.target.src;
-    imagePopupImage.alt = evt.target.alt;
-    imagePopupCaption.textContent = evt.target.parentNode.querySelector('.card__title').textContent;
+const openImagePopup = function (name, link) {
+    imagePopupImage.src = link;
+    imagePopupImage.alt = name;
+    imagePopupCaption.textContent = name;
     openModal(imagePopupContainer);
 }
 
@@ -45,7 +41,12 @@ function handleFormProfileSubmit(evt) {
     closeModal(profileEditPopup);
 }
 
-profileEditButton.addEventListener('click', () => openModal(profileEditPopup));
+profileEditButton.addEventListener('click', function () {
+    profileNameInput.value = document.querySelector('.profile__title').textContent;
+    profileJobInput.value = document.querySelector('.profile__description').textContent;
+    openModal(profileEditPopup);
+});
+
 
 profileForm.addEventListener('submit', handleFormProfileSubmit);
 

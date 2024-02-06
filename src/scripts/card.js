@@ -6,7 +6,7 @@ const createCard = function (name, link, deleteCard, likeCard, openImagePopup) {
     cardElement.querySelector('.card__image').src = link;
     cardElement.querySelector('.card__delete-button').addEventListener('click', deleteCard);
     cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
-    cardElement.querySelector('.card__image').addEventListener('click', openImagePopup);
+    cardElement.querySelector('.card__image').addEventListener('click', () => openImagePopup(name, link));
     
     return cardElement;
 }
