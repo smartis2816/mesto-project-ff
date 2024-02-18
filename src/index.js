@@ -2,6 +2,8 @@ import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './scripts/card.js';
 import { openModal, closeModal, closeModalOverlay } from './scripts/modal.js';
+import { enableValidation, clearValidation } from './scripts/validation.js';
+import * as api from './scripts/api.js';
 
 const placesList = document.querySelector('.places__list');
 const allPopups = document.querySelectorAll('.popup');
@@ -25,6 +27,16 @@ const imagePopupImage = document.querySelector('.popup__image');
 const imagePopupContainer = document.querySelector('.popup_type_image');
 const imagePopupCaption = document.querySelector('.popup__caption');
 
+// Конфиг для валидации
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
+
 // Функция для открытия попапа изображения
 const openImagePopup = function (name, link) {
     imagePopupImage.src = link;
@@ -44,6 +56,7 @@ function handleFormProfileSubmit(evt) {
 profileEditButton.addEventListener('click', function () {
     profileNameInput.value = document.querySelector('.profile__title').textContent;
     profileJobInput.value = document.querySelector('.profile__description').textContent;
+    clearValidation(profileForm, validationConfig);
     openModal(profileEditPopup);
 });
 
@@ -59,7 +72,11 @@ function handleFormCardSubmit(evt) {
     newPlaceLinkInput.value = '';
 }
 
-newPlaceButton.addEventListener('click', () => openModal(newPlacePopup));
+newPlaceButton.addEventListener('click', () => {
+    clearValidation(newPlaceForm, validationConfig);
+    openModal(newPlacePopup);
+});
+
 
 newPlaceForm.addEventListener('submit', handleFormCardSubmit);
 
@@ -71,3 +88,18 @@ allPopups.forEach((item) => {
 
 // Наполнение карточками из cards.js
 initialCards.forEach(item => placesList.append(createCard(item.name, item.link, deleteCard, likeCard, openImagePopup)));
+
+enableValidation(validationConfig);
+
+
+
+
+async function renderCards () {
+    // Запись через промис
+    // api.requestToServer().then((data) => console.log(data));
+    // Запись через async
+    const data = await api.requestToServer();
+    console.log(data);
+}
+
+renderCards();

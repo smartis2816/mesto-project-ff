@@ -12,6 +12,7 @@ const createCard = function (name, link, deleteCard, likeCard, openImagePopup) {
 }
 
 
+
 const likeCard = evt => evt.target.classList.toggle('card__like-button_is-active');
 
 const deleteCard = evt => evt.target.closest('.card').remove();
