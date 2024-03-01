@@ -17,7 +17,7 @@ const closeModalOverlay = function(evt) {
 }
 
 const closeModalEscape = function(evt) {
-    if (evt.keyCode === 27) {
+    if (evt.key === 'Escape') {
         closeModal(document.querySelector('.popup_is-opened'));
     }
 }

@@ -32,7 +32,7 @@ const checkInputValidity = function (inputElement, formElement, validationConfig
 
 const disableButton = function (buttonElement, validationConfig) {
     buttonElement.classList.add(validationConfig.inactiveButtonClass)
-    buttonElement.disabled = 'disabled';
+    buttonElement.disabled = true;
 }
 
 const enableButton = function (buttonElement, validationConfig) {
@@ -77,8 +77,8 @@ function clearValidation (formElement, validationConfig) {
     const inputList = formElement.querySelectorAll(validationConfig.inputSelector);
     const submitButtonElement = formElement.querySelector(validationConfig.submitButtonSelector);
 
-    toggleButtonState(submitButtonElement, formElement.checkValidity(), validationConfig);
-    [...inputList].forEach((inputElement) => {
+    disableButton(submitButtonElement, validationConfig);
+    inputList.forEach((inputElement) => {
         hideError(inputElement, formElement, validationConfig);
     });
 }

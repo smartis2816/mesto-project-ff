@@ -56,6 +56,11 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 };
 
+// Функция для изменения текста кнопки при загрузке
+const setLoadingText = (confirmButton, isLoading) => {
+    confirmButton.textContent = isLoading ? 'Сохранение...' : 'Сохранить';
+}
+
 // Функция для открытия попапа изображения
 const openImagePopup = function (name, link) {
     imagePopupImage.src = link;
@@ -67,9 +72,9 @@ const openImagePopup = function (name, link) {
 // Модальное окно редактирования профиля
 function handleFormProfileSubmit(evt) {
     evt.preventDefault();
+    setLoadingText(profileConfirmButton, true);
     api.editUserData(profileNameInput.value, profileJobInput.value)
         .then(res => {
-            profileConfirmButton.textContent = 'Сохранение...';
             profileName.textContent = res.name;
             profileAbout.textContent = res.about;
             closeModal(profileEditPopup);
@@ -78,9 +83,7 @@ function handleFormProfileSubmit(evt) {
 }
 
 profileEditButton.addEventListener('click', function () {
-    if (profileConfirmButton.textContent === 'Сохранение...') {
-        profileConfirmButton.textContent = 'Сохранить'
-    }
+    setLoadingText(profileConfirmButton, false);
     profileNameInput.value = profileName.textContent;
     profileJobInput.value = profileAbout.textContent;
     clearValidation(profileForm, validationConfig);
@@ -93,9 +96,9 @@ profileForm.addEventListener('submit', handleFormProfileSubmit);
 // Модальное окно для смены картинки аватара
 function handleFormAvatarSubmit(evt) {
     evt.preventDefault();
+    setLoadingText(avatarConfirmButton, true);
     api.changeAvatar(avatarInput.value)
         .then(res => {
-            avatarConfirmButton.textContent = 'Сохранение...';
             avatarEditButton.style = `background-image: url('${res.avatar}')`;
             closeModal(avatarEditPopup);
         })
@@ -103,10 +106,8 @@ function handleFormAvatarSubmit(evt) {
 }
 
 avatarEditButton.addEventListener('click', function () {
+    setLoadingText(avatarConfirmButton, false);
     clearValidation(avatarForm, validationConfig);
-    if (avatarConfirmButton.textContent === 'Сохранение...') {
-        avatarConfirmButton.textContent = 'Сохранить'
-    }
     openModal(avatarEditPopup);
 });
 
@@ -115,21 +116,18 @@ avatarForm.addEventListener('submit', handleFormAvatarSubmit);
 // Модальное окно добавления карточки
 function handleFormCardSubmit(evt) {
     evt.preventDefault();
+    setLoadingText(newPlaceConfirmButton, true);
     api.addCard(newPlaceprofileNameInput.value, newPlaceLinkInput.value)
         .then(res => {
-            newPlaceConfirmButton.textContent = 'Сохранение...';
             placesList.prepend(createCard(res, profileID, deletePlace, likeCard, openImagePopup));
             closeModal(newPlacePopup);
-            newPlaceprofileNameInput.value = '';
-            newPlaceLinkInput.value = '';
+            newPlaceForm.reset();
         })
         .catch((err) => {console.log(err);});
 }
 
 newPlaceButton.addEventListener('click', () => {
-    if (newPlaceConfirmButton.textContent === 'Сохранение...') {
-        newPlaceConfirmButton.textContent = 'Сохранить'
-    }
+    setLoadingText(newPlaceConfirmButton, false);
     clearValidation(newPlaceForm, validationConfig);
     openModal(newPlacePopup);
 });
@@ -169,8 +167,6 @@ enableValidation(validationConfig);
 function renderContent() {
     Promise.all([api.getUserData(), api.getCards()])
         .then(([userData, cards]) => {
-            console.log(userData);
-            console.log(cards);
             profileName.textContent = userData.name;
             profileAbout.textContent = userData.about;
             profileAvatar.style = `background-image: url('${userData.avatar}')`;
